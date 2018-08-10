@@ -54,10 +54,9 @@
   </div>
 
 
-  <div fxFlex>
+  <div fxFlex *ngIf="leaders">
     <h2>Corporate Leadership</h2>
-    <mat-card *ngIf="leaders">
-      
+    <mat-card>
       <mat-card-content>
           
         <mat-list role="list">
@@ -70,7 +69,10 @@
         </mat-list>
         
       </mat-card-content>
-      
     </mat-card>
+  </div>
+  
+  <div [hidden]="leaders">
+    <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
   </div>
 </div>

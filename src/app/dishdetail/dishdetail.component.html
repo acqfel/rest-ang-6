@@ -57,6 +57,14 @@
               <p matLine>{{item.rating}} Stars</p>
               <p matLine>-- {{item.author}} {{item.date | date:'mediumDate'}}</p>
           </mat-list-item>
+          
+          <!--Preview Comment-->
+          <mat-list-item role="listitem">
+              <p matLine>{{commentForm.value.comment}}</p>
+              <p matLine>{{commentForm.value.rating}} Stars</p>
+              <p matLine>-- {{commentForm.value.author}}</p>
+          </mat-list-item>
+          
         </mat-list>
         
       </mat-card-content>
@@ -86,7 +94,7 @@
           <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
         </mat-form-field>
       </p>
-      <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
+      <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="!commentForm.valid">Submit</button>
     </form>
     
   </div>

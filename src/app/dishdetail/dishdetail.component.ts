@@ -39,15 +39,15 @@ export class DishdetailComponent implements OnInit {
     'author': {
       'required':      'Name is required.',
       'minlength':     'Name must be at least 2 characters long.',
-      'maxlength':     'Name cannot be more than 25 characters long.'
+      'maxlength':     'Name cannot be more than 50 characters long.'
     },
     'rating': {
-      'required':      'Tel. number is required.'
+      'required':      'Rating number is required.'
     },
     'comment': {
       'required':      'Comment is required.',
       'minlength':     'Comment must be at least 2 characters long.',
-      'maxlength':     'Comment cannot be more than 25 characters long.'
+      'maxlength':     'Comment cannot be more than 1000 characters long.'
     }
   };
 
@@ -83,15 +83,15 @@ export class DishdetailComponent implements OnInit {
   
   createForm(): void {
     this.commentForm = this.fb.group({
-      author: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)] ],
+      author: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)] ],
       rating: ['5', ],
-      comment: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)] ]
+      comment: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(1000)] ]
     });
     
-    // this.commentForm.valueChanges
-    //   .subscribe(data => this.onValueChanged(data));
+    this.commentForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
 
-    // this.onValueChanged(); // (re)set validation messages now
+    this.onValueChanged(); // (re)set validation messages now
   }
   
   onSubmit() {
@@ -99,10 +99,30 @@ export class DishdetailComponent implements OnInit {
     console.log(this.comment);
     this.commentForm.reset({
       author: '',
-      rating: '',
+      rating: '5',
       comment: ''
     });
     this.commentFormDirective.resetForm();
+  }
+  
+  onValueChanged(data?: any) {
+    if (!this.commentForm) { return; }
+    const form = this.commentForm;
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
+        // clear previous error message (if any)
+        this.formErrors[field] = '';
+        const control = form.get(field);
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
+              this.formErrors[field] += messages[key] + ' ';
+            }
+          }
+        }
+      }
+    }
   }
 
 }

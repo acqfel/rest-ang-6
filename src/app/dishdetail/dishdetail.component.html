@@ -62,7 +62,7 @@
           <mat-list-item role="listitem">
               <p matLine>{{commentForm.value.comment}}</p>
               <p matLine>{{commentForm.value.rating}} Stars</p>
-              <p matLine>-- {{commentForm.value.author}}</p>
+              <p matLine *ngIf="!formErrors.author">-- {{commentForm.value.author}}</p>
           </mat-list-item>
           
         </mat-list>
@@ -73,7 +73,7 @@
     
     <!--Insert Comment Section-->
     
-    <p>{{ commentForm.value | json }} {{ commentForm.status | json }}</p>
+    <!--<p>{{ commentForm.value | json }} {{ commentForm.status | json }}</p>-->
     
     <form novalidate [formGroup]="commentForm" #fform="ngForm" (ngSubmit)="onSubmit()">
       <p>

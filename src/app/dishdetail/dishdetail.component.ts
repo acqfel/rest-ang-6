@@ -19,16 +19,18 @@ export class DishdetailComponent implements OnInit {
 
   @Input()
   dish: Dish;
-  
+
   dishIds: number[];
   prev: number;
   next: number;
-  
+
+  errMess: string;
+
   @ViewChild('fform') commentFormDirective;
-  
+
   commentForm: FormGroup;
   comment: Comment;
-  
+
   formErrors = {
     'author': '',
     'rating': '',
@@ -56,7 +58,7 @@ export class DishdetailComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private fb: FormBuilder,
-    @Inject('BaseURL') private BaseURL) { 
+    @Inject('BaseURL') private BaseURL) {
       this.createForm();
     }
 
@@ -66,53 +68,54 @@ export class DishdetailComponent implements OnInit {
     // // Using Promise / Observable
     // this.dishservice.getDish(id)
     //   .subscribe(dish => this.dish = dish);
-    
+
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
     this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id'])))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
+      errmess => this.errMess = <any>errmess);
   }
-  
+
   setPrevNext(dishId: number) {
     const index = this.dishIds.indexOf(dishId);
     this.prev = this.dishIds[(this.dishIds.length + index - 1) % this.dishIds.length];
     this.next = this.dishIds[(this.dishIds.length + index + 1) % this.dishIds.length];
   }
-  
+
   goBack(): void {
     this.location.back();
   }
-  
+
   createForm(): void {
     this.commentForm = this.fb.group({
       author: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)] ],
       rating: ['5', ],
       comment: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(1000)] ]
     });
-    
+
     this.commentForm.valueChanges
       .subscribe(data => this.onValueChanged(data));
 
     this.onValueChanged(); // (re)set validation messages now
   }
-  
+
   onSubmit() {
     this.comment = this.commentForm.value;
     this.comment.date = new Date().toISOString();
     console.log(this.comment);
-    
+
     this.dish.comments.push(this.comment);
     console.log("dish: "+this.dish.comments.length);
-    
+
     this.commentFormDirective.resetForm();
-    
+
     this.commentForm.reset({
       author: '',
       rating: '5',
       comment: ''
     });
-    
+
   }
-  
+
   onValueChanged(data?: any) {
     if (!this.commentForm) { return; }
     const form = this.commentForm;

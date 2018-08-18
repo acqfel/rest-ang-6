@@ -39,6 +39,8 @@ import { LoginComponent } from './login/login.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { baseURL } from './shared/baseurl';
+import { RestangularModule, Restangular } from 'ngx-restangular';
+import { RestangularConfigFactory } from './shared/restConfig';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,7 @@ import { baseURL } from './shared/baseurl';
     MatCardModule,
     MatButtonModule,
     MatDialogModule,
-    MatFormFieldModule, 
+    MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
@@ -72,14 +74,15 @@ import { baseURL } from './shared/baseurl';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    RestangularModule.forRoot(RestangularConfigFactory)
   ],
   entryComponents: [
         LoginComponent
   ],
-  providers: [DishService, 
-              PromotionService, 
-              LeaderService, 
+  providers: [DishService,
+              PromotionService,
+              LeaderService,
               {provide: 'BaseURL', useValue: baseURL},
               ProcessHTTPMsgService],
   bootstrap: [AppComponent]

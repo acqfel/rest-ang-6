@@ -19,6 +19,7 @@ export class DishdetailComponent implements OnInit {
 
   @Input()
   dish: Dish;
+  dishcopy = null;
 
   dishIds: number[];
   prev: number;
@@ -70,9 +71,24 @@ export class DishdetailComponent implements OnInit {
 
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds,
       errmess => this.errMess = <any>errmess.message);
-    this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id'])))
-    .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
+
+    // this.route.params.pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id'])))
+    // .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); },
+    //   errmess => this.errMess = <any>errmess);
+
+    // Angular 4
+    // this.route.params
+    //   .switchMap((params: Params) => { return this.dishservice.getDish(+params['id']); })
+    //   .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
+    //       errmess => { this.dish = null; this.errMess = <any>errmess; });
+
+    // Angular 6
+    this.route.params
+      .pipe(switchMap((params: Params) => this.dishservice.getDish(+params['id'])))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
       errmess => this.errMess = <any>errmess);
+
+
   }
 
   setPrevNext(dishId: number) {
@@ -101,10 +117,10 @@ export class DishdetailComponent implements OnInit {
   onSubmit() {
     this.comment = this.commentForm.value;
     this.comment.date = new Date().toISOString();
-    console.log(this.comment);
 
-    this.dish.comments.push(this.comment);
-    console.log("dish: "+this.dish.comments.length);
+    this.dishcopy.comments.push(this.comment);
+    this.dishcopy.save()
+      .subscribe(dish => { this.dish = dish; console.log(this.dish); });
 
     this.commentFormDirective.resetForm();
 

@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   leader: Leader;
 
   dishErrMess: string;
+  promoErrMess: string;
+  leaderErrMess: string;
 
   constructor(private dishservice: DishService,
     private promotionservice: PromotionService,

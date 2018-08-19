@@ -3,7 +3,7 @@ import { Leader } from '../shared/leader';
 import { LEADERS } from '../shared/leaders';
 import { LeaderService } from '../services/leader.service';
 
-import { flyInOut } from '../animations/app.animation';
+import { flyInOut, expand } from '../animations/app.animation';
 
 // tslint:disable-next-line:use-host-property-decorator
 @Component({
@@ -15,7 +15,7 @@ import { flyInOut } from '../animations/app.animation';
   'style': 'display: block;'
   },
   animations: [
-    flyInOut()
+    flyInOut(), expand()
   ]
 })
 export class AboutComponent implements OnInit {

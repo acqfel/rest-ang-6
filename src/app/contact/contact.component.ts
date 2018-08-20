@@ -4,6 +4,8 @@ import { Feedback, ContactType } from '../shared/feedback';
 
 import { flyInOut } from '../animations/app.animation';
 
+import { FeedbackService } from '../services/feedback.service';
+
 // tslint:disable-next-line:use-host-property-decorator
 @Component({
   selector: 'app-contact',
@@ -53,7 +55,8 @@ export class ContactComponent implements OnInit {
     },
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private feedbackservice: FeedbackService) {
     this.createForm();
   }
 
@@ -80,6 +83,8 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     this.feedback = this.feedbackForm.value;
     console.log(this.feedback);
+    this.feedbackservice.submitFeedback(this.feedback)
+      .subscribe(feedback => console.log("Fb Saved: "+feedback));
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
